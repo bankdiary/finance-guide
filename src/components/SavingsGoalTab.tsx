@@ -182,123 +182,8 @@ export function SavingsGoalTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-      {/* Left Column: Hero Summary + Explanation + Copy CTA */}
-      <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
-          {mainResult.mode === 'monthlyToLump' ? (
-            <>
-              <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
-                매달 <span className="text-[#1D3B8B] font-bold">{formatManEok(monthlyAmount)}</span>
-                씩 <span className="text-[#1D3B8B] font-bold">{years}년</span> 모으면 (연{' '}
-                {annualRate.toFixed(1)}%)
-              </div>
-              <div className="mt-4 flex items-baseline justify-between gap-3">
-                <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
-                  {formatKoreanUnits(mainResult.finalTotal)}
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="text-[16px] font-bold text-[#B44112] tabular-nums">
-                    이자 +{formatKoreanUnits(mainResult.interest)}
-                  </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    {isTaxFree ? '비과세 기준' : '일반과세 15.4% 후'}
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
-                <span className="text-[#1D3B8B] font-bold">{years}년</span> 안에{' '}
-                <span className="text-[#1D3B8B] font-bold">{formatManEok(targetAmount)}</span>을
-                모으려면
-              </div>
-              <div className="mt-4 flex items-baseline justify-between gap-3">
-                <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
-                  월 {formatWon(mainResult.requiredMonthly)}
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="text-[15px] font-bold text-[#B44112] tabular-nums">
-                    연 {annualRate.toFixed(1)}%
-                  </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    {isTaxFree ? '비과세 기준' : '일반과세 15.4% 후'}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* Stacked Principal vs Interest Ratio Bar */}
-          <div className="mt-4 space-y-1.5">
-            <div className="h-2.5 w-full rounded-full bg-[#DCE4F3] overflow-hidden flex">
-              <div
-                className="h-full bg-[#1D3B8B] transition-all duration-300"
-                style={{ width: `${mainResult.principalPct}%` }}
-              />
-              <div
-                className="h-full bg-[#BA3F13] transition-all duration-300"
-                style={{ width: `${mainResult.interestPct}%` }}
-              />
-            </div>
-            <div className="flex items-center justify-between text-xs tabular-nums">
-              <span className="text-slate-700 font-medium">
-                원금 {formatKoreanUnits(mainResult.principal)} ({mainResult.principalPct.toFixed(1)}%)
-              </span>
-              <span className="text-[#B44112] font-semibold">
-                수익 {formatKoreanUnits(mainResult.interest)} ({mainResult.interestPct.toFixed(1)}%)
-              </span>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
-          {mainResult.mode === 'monthlyToLump' ? (
-            <>
-              <p>
-                {years}년 동안 내가 직접 낸 원금은{' '}
-                <strong className="font-bold text-slate-900 tabular-nums">
-                  {formatKoreanUnits(mainResult.principal)}
-                </strong>
-                이고, 시간이 만들어준 이자 수익이{' '}
-                <strong className="font-bold text-[#B44112] tabular-nums">
-                  {formatKoreanUnits(mainResult.interest)}
-                </strong>
-                입니다.
-              </p>
-              <p>
-                매달 같은 금액을 적립하더라도 일찍 시작할수록 복리 기간이 늘어나 목표 금액에 훨씬
-                수월하게 도달합니다.
-              </p>
-            </>
-          ) : (
-            <>
-              <p>
-                목표 금액 {formatManEok(targetAmount)} 중{' '}
-                <strong className="font-bold text-slate-900 tabular-nums">
-                  {formatKoreanUnits(mainResult.principal)}
-                </strong>
-                은 매달 저축으로 모으고, 나머지{' '}
-                <strong className="font-bold text-[#B44112] tabular-nums">
-                  {formatKoreanUnits(mainResult.interest)}
-                </strong>
-                은 수익률이 채워주는 구조입니다.
-              </p>
-              <p>
-                목표 시점이 정해져 있다면 시작을 몇 년만 미뤄도 매달 필요한 저축액이 크게
-                늘어납니다.
-              </p>
-            </>
-          )}
-        </section>
-
-        <div className="hidden lg:block">
-          <CopyKakaoButton getCopyText={getCopyText} />
-        </div>
-      </div>
-
-      {/* Right Column: Mode & Controls + Cost of Delay Comparison */}
-      <div className="lg:col-span-7 space-y-4">
+      {/* 1. 조건 설정 (Mobile: 1st right under tab menu | Desktop: Right column top) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-5">
           {/* Mode Segmented Toggle */}
           <div className="grid grid-cols-2 p-1 rounded-xl bg-[#EFF2F7]">
@@ -495,7 +380,125 @@ export function SavingsGoalTab() {
             </div>
           </div>
         </section>
+      </div>
 
+      {/* 2. 결과 요약 + 설명 (+ Desktop Copy CTA) */}
+      <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-6 space-y-4">
+        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
+          {mainResult.mode === 'monthlyToLump' ? (
+            <>
+              <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
+                매달 <span className="text-[#1D3B8B] font-bold">{formatManEok(monthlyAmount)}</span>
+                씩 <span className="text-[#1D3B8B] font-bold">{years}년</span> 모으면 (연{' '}
+                {annualRate.toFixed(1)}%)
+              </div>
+              <div className="mt-4 flex items-baseline justify-between gap-3">
+                <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
+                  {formatKoreanUnits(mainResult.finalTotal)}
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-[16px] font-bold text-[#B44112] tabular-nums">
+                    이자 +{formatKoreanUnits(mainResult.interest)}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-0.5">
+                    {isTaxFree ? '비과세 기준' : '일반과세 15.4% 후'}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
+                <span className="text-[#1D3B8B] font-bold">{years}년</span> 안에{' '}
+                <span className="text-[#1D3B8B] font-bold">{formatManEok(targetAmount)}</span>을
+                모으려면
+              </div>
+              <div className="mt-4 flex items-baseline justify-between gap-3">
+                <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
+                  월 {formatWon(mainResult.requiredMonthly)}
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-[15px] font-bold text-[#B44112] tabular-nums">
+                    연 {annualRate.toFixed(1)}%
+                  </div>
+                  <div className="text-xs text-slate-500 mt-0.5">
+                    {isTaxFree ? '비과세 기준' : '일반과세 15.4% 후'}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Stacked Principal vs Interest Ratio Bar */}
+          <div className="mt-4 space-y-1.5">
+            <div className="h-2.5 w-full rounded-full bg-[#DCE4F3] overflow-hidden flex">
+              <div
+                className="h-full bg-[#1D3B8B] transition-all duration-300"
+                style={{ width: `${mainResult.principalPct}%` }}
+              />
+              <div
+                className="h-full bg-[#BA3F13] transition-all duration-300"
+                style={{ width: `${mainResult.interestPct}%` }}
+              />
+            </div>
+            <div className="flex items-center justify-between text-xs tabular-nums">
+              <span className="text-slate-700 font-medium">
+                원금 {formatKoreanUnits(mainResult.principal)} ({mainResult.principalPct.toFixed(1)}%)
+              </span>
+              <span className="text-[#B44112] font-semibold">
+                수익 {formatKoreanUnits(mainResult.interest)} ({mainResult.interestPct.toFixed(1)}%)
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
+          {mainResult.mode === 'monthlyToLump' ? (
+            <>
+              <p>
+                {years}년 동안 내가 직접 낸 원금은{' '}
+                <strong className="font-bold text-slate-900 tabular-nums">
+                  {formatKoreanUnits(mainResult.principal)}
+                </strong>
+                이고, 시간이 만들어준 이자 수익이{' '}
+                <strong className="font-bold text-[#B44112] tabular-nums">
+                  {formatKoreanUnits(mainResult.interest)}
+                </strong>
+                입니다.
+              </p>
+              <p>
+                매달 같은 금액을 적립하더라도 일찍 시작할수록 복리 기간이 늘어나 목표 금액에 훨씬
+                수월하게 도달합니다.
+              </p>
+            </>
+          ) : (
+            <>
+              <p>
+                목표 금액 {formatManEok(targetAmount)} 중{' '}
+                <strong className="font-bold text-slate-900 tabular-nums">
+                  {formatKoreanUnits(mainResult.principal)}
+                </strong>
+                은 매달 저축으로 모으고, 나머지{' '}
+                <strong className="font-bold text-[#B44112] tabular-nums">
+                  {formatKoreanUnits(mainResult.interest)}
+                </strong>
+                은 수익률이 채워주는 구조입니다.
+              </p>
+              <p>
+                목표 시점이 정해져 있다면 시작을 몇 년만 미뤄도 매달 필요한 저축액이 크게
+                늘어납니다.
+              </p>
+            </>
+          )}
+        </section>
+
+        <div className="hidden lg:block">
+          <CopyKakaoButton getCopyText={getCopyText} />
+        </div>
+      </div>
+
+      {/* 3. 지연 비교 (+ Mobile Copy CTA) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-2 space-y-4">
         {/* Cost of Delay Card */}
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-3.5">
           <div className="flex items-center justify-between gap-2">

@@ -95,72 +95,8 @@ export function MoneyValueTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-      {/* Left Column: Hero Result + Explanation + Copy CTA */}
-      <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
-          <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
-            <span className="text-[#1D3B8B] font-bold">{years}년 뒤</span>, 오늘의{' '}
-            <span className="text-[#1D3B8B] font-bold">{formatManEok(principal)}</span>으로 살 수
-            있는 가치는
-          </div>
-
-          <div className="mt-4 flex items-baseline justify-between gap-3">
-            <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
-              {formatKoreanUnits(calculations.realValue)}
-            </div>
-            <div className="text-right shrink-0">
-              <div className="text-[18px] font-bold text-[#B44112] tabular-nums leading-tight">
-                구매력 -{calculations.lossPct.toFixed(1)}%
-              </div>
-              <div className="text-[13px] font-semibold text-[#B44112] tabular-nums mt-0.5">
-                물가 연 +{inflationRate.toFixed(2)}%
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-3 text-[13px] text-slate-600 tabular-nums">
-            오늘 {formatManEok(principal)}의 생활 수준을 {years}년 뒤에도 유지하려면{' '}
-            <strong className="text-slate-900">
-              {formatKoreanUnits(calculations.requiredFutureNominal)}
-            </strong>
-            이 필요합니다.
-          </p>
-        </section>
-
-        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
-          <p>
-            통장에 적힌 숫자는 {years}년 뒤에도 그대로{' '}
-            <strong className="font-bold text-slate-900">{formatManEok(principal)}</strong>
-            이지만, 물가가 해마다 {inflationRate.toFixed(2)}%씩 오르면 실제로 살 수 있는 양은{' '}
-            <strong className="font-bold text-[#B44112] tabular-nums">
-              {formatKoreanUnits(calculations.realValue)}
-            </strong>
-            어치로 줄어듭니다.
-          </p>
-          <p>
-            즉, 현금 그대로 두는 것만으로도 {years}년 동안 약{' '}
-            <strong className="font-bold text-[#B44112] tabular-nums">
-              {formatKoreanUnits(calculations.lostValue)}
-            </strong>
-            의 구매력이 보이지 않게 빠져나갑니다.
-          </p>
-          <p>
-            반대로 세전 연 {depositRate.toFixed(1)}% 예금(일반과세 15.4% 차감 후 세후{' '}
-            {(depositRate * 0.846).toFixed(2)}%)에 두면 실질 가치는{' '}
-            <strong className="font-bold text-[#1D3B8B] tabular-nums">
-              {formatKoreanUnits(calculations.realValueWithDeposit)}
-            </strong>
-            이 됩니다.
-          </p>
-        </section>
-
-        <div className="hidden lg:block">
-          <CopyKakaoButton getCopyText={getCopyText} />
-        </div>
-      </div>
-
-      {/* Right Column: Controls + Timeline Visual */}
-      <div className="lg:col-span-7 space-y-4">
+      {/* 1. 조건 설정 (Mobile: 1st right under tab menu | Desktop: Right column top) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-5">
           <h2 className="text-[16px] font-bold text-slate-900">조건 설정</h2>
 
@@ -312,7 +248,74 @@ export function MoneyValueTab() {
             </div>
           </div>
         </section>
+      </div>
 
+      {/* 2. 결과 요약 + 설명 (+ Desktop Copy CTA) */}
+      <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-6 space-y-4">
+        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
+          <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
+            <span className="text-[#1D3B8B] font-bold">{years}년 뒤</span>, 오늘의{' '}
+            <span className="text-[#1D3B8B] font-bold">{formatManEok(principal)}</span>으로 살 수
+            있는 가치는
+          </div>
+
+          <div className="mt-4 flex items-baseline justify-between gap-3">
+            <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
+              {formatKoreanUnits(calculations.realValue)}
+            </div>
+            <div className="text-right shrink-0">
+              <div className="text-[18px] font-bold text-[#B44112] tabular-nums leading-tight">
+                구매력 -{calculations.lossPct.toFixed(1)}%
+              </div>
+              <div className="text-[13px] font-semibold text-[#B44112] tabular-nums mt-0.5">
+                물가 연 +{inflationRate.toFixed(2)}%
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-3 text-[13px] text-slate-600 tabular-nums">
+            오늘 {formatManEok(principal)}의 생활 수준을 {years}년 뒤에도 유지하려면{' '}
+            <strong className="text-slate-900">
+              {formatKoreanUnits(calculations.requiredFutureNominal)}
+            </strong>
+            이 필요합니다.
+          </p>
+        </section>
+
+        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
+          <p>
+            통장에 적힌 숫자는 {years}년 뒤에도 그대로{' '}
+            <strong className="font-bold text-slate-900">{formatManEok(principal)}</strong>
+            이지만, 물가가 해마다 {inflationRate.toFixed(2)}%씩 오르면 실제로 살 수 있는 양은{' '}
+            <strong className="font-bold text-[#B44112] tabular-nums">
+              {formatKoreanUnits(calculations.realValue)}
+            </strong>
+            어치로 줄어듭니다.
+          </p>
+          <p>
+            즉, 현금 그대로 두는 것만으로도 {years}년 동안 약{' '}
+            <strong className="font-bold text-[#B44112] tabular-nums">
+              {formatKoreanUnits(calculations.lostValue)}
+            </strong>
+            의 구매력이 보이지 않게 빠져나갑니다.
+          </p>
+          <p>
+            반대로 세전 연 {depositRate.toFixed(1)}% 예금(일반과세 15.4% 차감 후 세후{' '}
+            {(depositRate * 0.846).toFixed(2)}%)에 두면 실질 가치는{' '}
+            <strong className="font-bold text-[#1D3B8B] tabular-nums">
+              {formatKoreanUnits(calculations.realValueWithDeposit)}
+            </strong>
+            이 됩니다.
+          </p>
+        </section>
+
+        <div className="hidden lg:block">
+          <CopyKakaoButton getCopyText={getCopyText} />
+        </div>
+      </div>
+
+      {/* 3. 기간별 구매력 변화 (+ Mobile Copy CTA) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-2 space-y-4">
         {/* Purchasing Power Decay Timeline */}
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-4">
           <div className="flex items-center justify-between gap-2">

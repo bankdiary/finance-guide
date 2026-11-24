@@ -126,89 +126,8 @@ export function RefundRateTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-      {/* Left Column: Hero Summary + Explanation + Copy CTA */}
-      <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
-          <div className="text-[15px] font-semibold text-slate-700 leading-snug">
-            총 납입원금{' '}
-            <span className="text-[#1D3B8B] font-bold">{formatKoreanUnits(analysis.totalPaid)}</span>
-            을 {effectiveTotalYears}년 시점에 돌려받으면
-          </div>
-
-          <div className="mt-4 flex items-baseline justify-between gap-3">
-            <div>
-              <div className="text-xs font-medium text-slate-500">예상 환급금</div>
-              <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-tight mt-0.5">
-                {formatKoreanUnits(analysis.expectedRefund)}
-              </div>
-            </div>
-            <div className="text-right shrink-0">
-              <div className="text-[22px] font-bold text-[#B44112] tabular-nums leading-tight">
-                {analysis.refundRatePct.toFixed(1)}%
-              </div>
-              <div className="text-xs font-semibold text-slate-600 mt-0.5 tabular-nums">
-                {analysis.netProfit >= 0 ? '+' : ''}
-                {formatKoreanUnits(analysis.netProfit)}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4 pt-3.5 border-t border-[#D7E2F6] grid grid-cols-2 gap-3">
-            <div>
-              <div className="text-xs text-slate-500">실제 연환산 수익률(IRR)</div>
-              <div className="text-[18px] font-bold text-[#1D3B8B] tabular-nums mt-0.5">
-                연 {analysis.annualIRR.toFixed(2)}%
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-xs text-slate-500">
-                {isTaxFree ? '일반과세 예금 환산금리' : '물가 반영 실질 환급률'}
-              </div>
-              <div className="text-[18px] font-bold text-slate-900 tabular-nums mt-0.5">
-                {isTaxFree
-                  ? `세전 연 ${analysis.bankEquivalentRate.toFixed(2)}%`
-                  : `${analysis.realRefundRatePct.toFixed(1)}%`}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
-          <p>
-            환급률{' '}
-            <strong className="font-bold text-[#B44112] tabular-nums">
-              {analysis.refundRatePct.toFixed(1)}%
-            </strong>
-            는 총 납입금 대비 비율일 뿐, 매년 복리로 계산한 실제 수익률은{' '}
-            <strong className="font-bold text-[#1D3B8B] tabular-nums">
-              연 {analysis.annualIRR.toFixed(2)}%
-            </strong>
-            입니다.
-          </p>
-          {paymentType === 'monthly' && (
-            <p>
-              매달 나눠 내는 적립식은 모든 돈이 {effectiveTotalYears}년 내내 묶여 있는 것이 아니라
-              평균 보유 기간이 더 짧기 때문에, 같은 125%라도 일시납보다 실제 연 수익률이 더 높게
-              나옵니다.
-            </p>
-          )}
-          <p>
-            지난 10년 평균 물가(연 {OVERALL_CPI.exactAnnualRatePct}%)를 반영하면 {effectiveTotalYears}
-            년 뒤 {formatKoreanUnits(analysis.expectedRefund)}의 오늘 구매력 가치는 약{' '}
-            <strong className="font-bold text-slate-900 tabular-nums">
-              {formatKoreanUnits(analysis.realValueToday)}
-            </strong>
-            ({analysis.realRefundRatePct.toFixed(1)}%) 수준입니다.
-          </p>
-        </section>
-
-        <div className="hidden lg:block">
-          <CopyKakaoButton getCopyText={getCopyText} />
-        </div>
-      </div>
-
-      {/* Right Column: Inputs + Comparison Table */}
-      <div className="lg:col-span-7 space-y-4">
+      {/* 1. 조건 설정 (Mobile: 1st right under tab menu | Desktop: Right column top) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-5">
           {/* Payment Type Toggle */}
           <div className="grid grid-cols-2 p-1 rounded-xl bg-[#EFF2F7]">
@@ -500,7 +419,91 @@ export function RefundRateTab() {
             )}
           </div>
         </section>
+      </div>
 
+      {/* 2. 결과 요약 + 설명 (+ Desktop Copy CTA) */}
+      <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-6 space-y-4">
+        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
+          <div className="text-[15px] font-semibold text-slate-700 leading-snug">
+            총 납입원금{' '}
+            <span className="text-[#1D3B8B] font-bold">{formatKoreanUnits(analysis.totalPaid)}</span>
+            을 {effectiveTotalYears}년 시점에 돌려받으면
+          </div>
+
+          <div className="mt-4 flex items-baseline justify-between gap-3">
+            <div>
+              <div className="text-xs font-medium text-slate-500">예상 환급금</div>
+              <div className="text-[30px] sm:text-[34px] font-bold tracking-tight text-slate-950 tabular-nums leading-tight mt-0.5">
+                {formatKoreanUnits(analysis.expectedRefund)}
+              </div>
+            </div>
+            <div className="text-right shrink-0">
+              <div className="text-[22px] font-bold text-[#B44112] tabular-nums leading-tight">
+                {analysis.refundRatePct.toFixed(1)}%
+              </div>
+              <div className="text-xs font-semibold text-slate-600 mt-0.5 tabular-nums">
+                {analysis.netProfit >= 0 ? '+' : ''}
+                {formatKoreanUnits(analysis.netProfit)}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-3.5 border-t border-[#D7E2F6] grid grid-cols-2 gap-3">
+            <div>
+              <div className="text-xs text-slate-500">실제 연환산 수익률(IRR)</div>
+              <div className="text-[18px] font-bold text-[#1D3B8B] tabular-nums mt-0.5">
+                연 {analysis.annualIRR.toFixed(2)}%
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-xs text-slate-500">
+                {isTaxFree ? '일반과세 예금 환산금리' : '물가 반영 실질 환급률'}
+              </div>
+              <div className="text-[18px] font-bold text-slate-900 tabular-nums mt-0.5">
+                {isTaxFree
+                  ? `세전 연 ${analysis.bankEquivalentRate.toFixed(2)}%`
+                  : `${analysis.realRefundRatePct.toFixed(1)}%`}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
+          <p>
+            환급률{' '}
+            <strong className="font-bold text-[#B44112] tabular-nums">
+              {analysis.refundRatePct.toFixed(1)}%
+            </strong>
+            는 총 납입금 대비 비율일 뿐, 매년 복리로 계산한 실제 수익률은{' '}
+            <strong className="font-bold text-[#1D3B8B] tabular-nums">
+              연 {analysis.annualIRR.toFixed(2)}%
+            </strong>
+            입니다.
+          </p>
+          {paymentType === 'monthly' && (
+            <p>
+              매달 나눠 내는 적립식은 모든 돈이 {effectiveTotalYears}년 내내 묶여 있는 것이 아니라
+              평균 보유 기간이 더 짧기 때문에, 같은 125%라도 일시납보다 실제 연 수익률이 더 높게
+              나옵니다.
+            </p>
+          )}
+          <p>
+            지난 10년 평균 물가(연 {OVERALL_CPI.exactAnnualRatePct}%)를 반영하면 {effectiveTotalYears}
+            년 뒤 {formatKoreanUnits(analysis.expectedRefund)}의 오늘 구매력 가치는 약{' '}
+            <strong className="font-bold text-slate-900 tabular-nums">
+              {formatKoreanUnits(analysis.realValueToday)}
+            </strong>
+            ({analysis.realRefundRatePct.toFixed(1)}%) 수준입니다.
+          </p>
+        </section>
+
+        <div className="hidden lg:block">
+          <CopyKakaoButton getCopyText={getCopyText} />
+        </div>
+      </div>
+
+      {/* 3. 수익성 한눈에 비교 (+ Mobile Copy CTA) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-2 space-y-4">
         {/* Summary Metrics Table */}
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-3">
           <h2 className="text-[16px] font-bold text-slate-900">수익성 한눈에 비교</h2>

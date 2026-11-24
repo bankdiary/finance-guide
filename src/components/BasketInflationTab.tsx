@@ -209,72 +209,85 @@ export function BasketInflationTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-      {/* Left Column on Desktop: Hero Result + Dynamic Explanation + 20-Year Projection + Copy CTA */}
-      <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
+      {/* 1. 조건 설정 (Mobile: 1st right under tab menu | Desktop: Right column top) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
+        <section className="rounded-2xl bg-white border border-[#E5E9F2] p-4 sm:p-5 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-[15px] font-bold text-slate-900">조건 설정 · 기준 금액</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold text-[#1D3B8B] tabular-nums">
+                {formatManEok(baseAmount)}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setCustomAmountInput(String(baseAmount));
+                  setEditingAmount((v) => !v);
+                }}
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#EFF2F7] text-slate-700 hover:bg-slate-200 cursor-pointer transition-colors whitespace-nowrap"
+              >
+                {editingAmount ? '닫기' : '직접 입력'}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5">
+            {BASKET_BASE_PRESETS.map((preset) => (
+              <button
+                key={preset.value}
+                type="button"
+                onClick={() => {
+                  setBaseAmount(preset.value);
+                  setCustomAmountInput(String(preset.value));
+                  setEditingAmount(false);
+                }}
+                className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-colors whitespace-nowrap ${
+                  baseAmount === preset.value
+                    ? 'bg-[#1D3B8B] text-white'
+                    : 'bg-[#EFF2F7] text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+
+          {editingAmount && (
+            <div className="pt-1 flex items-center gap-2">
+              <input
+                type="text"
+                inputMode="numeric"
+                value={customAmountInput}
+                onChange={(e) => setCustomAmountInput(e.target.value.replace(/[^0-9]/g, ''))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleApplyCustomAmount();
+                }}
+                placeholder="금액 직접 입력 (예: 250000)"
+                aria-label="기준 금액 직접 입력"
+                className="flex-1 min-w-0 px-3.5 py-2 text-sm font-semibold tabular-nums rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-[#1D3B8B]"
+              />
+              <span className="text-sm font-medium text-slate-500 shrink-0">원</span>
+              <button
+                type="button"
+                onClick={handleApplyCustomAmount}
+                className="min-h-[38px] px-4 py-2 rounded-xl bg-[#1D3B8B] text-white text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
+              >
+                적용
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* 2. 결과 요약 + 설명 + 20년 후 + Desktop Copy CTA */}
+      <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-6 space-y-4">
         {/* Hero CPI Summary Card */}
         <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
           <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
             <span>{OVERALL_CPI.baseYearLabel}에 </span>
-            <button
-              type="button"
-              onClick={() => {
-                setCustomAmountInput(String(baseAmount));
-                setEditingAmount((v) => !v);
-              }}
-              className="inline-flex items-center font-bold text-[#1D3B8B] underline decoration-[#1D3B8B]/40 underline-offset-4 hover:decoration-[#1D3B8B] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1D3B8B] rounded px-0.5"
-              title="기준 금액 변경하기"
-            >
-              {formatManEok(baseAmount)}
-            </button>
+            <span className="font-bold text-[#1D3B8B]">{formatManEok(baseAmount)}</span>
             <span>이던 물건이 {OVERALL_CPI.targetYearLabel}에는</span>
           </div>
-
-          {/* Interactive Base Amount Editor (Collapsed by default to match screenshot, expands on click) */}
-          {editingAmount && (
-            <div className="mt-3 p-3 rounded-xl bg-white border border-[#D4E0F7] space-y-2.5">
-              <div className="flex flex-wrap gap-1.5">
-                {BASKET_BASE_PRESETS.map((preset) => (
-                  <button
-                    key={preset.value}
-                    type="button"
-                    onClick={() => {
-                      setBaseAmount(preset.value);
-                      setCustomAmountInput(String(preset.value));
-                      setEditingAmount(false);
-                    }}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
-                      baseAmount === preset.value
-                        ? 'bg-[#1D3B8B] text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={customAmountInput}
-                  onChange={(e) => setCustomAmountInput(e.target.value.replace(/[^0-9]/g, ''))}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleApplyCustomAmount();
-                  }}
-                  placeholder="직접 입력 (원)"
-                  aria-label="기준 금액 직접 입력"
-                  className="flex-1 min-w-0 px-3 py-1.5 text-sm font-medium tabular-nums rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-[#1D3B8B]"
-                />
-                <button
-                  type="button"
-                  onClick={handleApplyCustomAmount}
-                  className="px-3 py-1.5 rounded-lg bg-[#1D3B8B] text-white text-xs font-semibold cursor-pointer whitespace-nowrap shrink-0"
-                >
-                  적용
-                </button>
-              </div>
-            </div>
-          )}
 
           <div className="mt-4 flex items-baseline justify-between gap-3">
             <div className="text-[32px] sm:text-[36px] font-bold tracking-tight text-slate-950 tabular-nums leading-none">
@@ -419,8 +432,8 @@ export function BasketInflationTab() {
         </div>
       </div>
 
-      {/* Right Column on Desktop: 15-Item Breakdown List */}
-      <div className="lg:col-span-7 space-y-4">
+      {/* 3. 품목별 리스트 + Mobile Copy CTA */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-2 space-y-4">
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-[16px] font-bold text-slate-900">

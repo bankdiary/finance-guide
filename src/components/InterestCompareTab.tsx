@@ -87,76 +87,8 @@ export function InterestCompareTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-      {/* Left Column: Hero Result + Peach Explanation + Copy CTA */}
-      <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
-          <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
-            <span className="text-[#1D3B8B] font-bold">{formatManEok(principal)}</span>을 연{' '}
-            <span className="text-[#1D3B8B] font-bold">{annualRate.toFixed(1)}%</span>로{' '}
-            <span className="text-[#1D3B8B] font-bold">{years}년</span> 굴리면
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-white/80 border border-[#DCE5F7] p-3.5">
-              <div className="text-xs font-medium text-slate-500">단리 최종 금액</div>
-              <div className="mt-1 text-[20px] sm:text-[22px] font-bold text-slate-700 tabular-nums leading-tight">
-                {formatKoreanUnits(result.simpleTotal)}
-              </div>
-              <div className="mt-1 text-xs text-slate-500 tabular-nums">
-                이자 +{formatKoreanUnits(result.simpleInterest)}
-              </div>
-            </div>
-
-            <div className="rounded-xl bg-white border border-[#B9CCEE] p-3.5">
-              <div className="text-xs font-semibold text-[#1D3B8B]">복리 최종 금액</div>
-              <div className="mt-1 text-[20px] sm:text-[22px] font-bold text-slate-950 tabular-nums leading-tight">
-                {formatKoreanUnits(result.compoundTotal)}
-              </div>
-              <div className="mt-1 text-xs font-semibold text-[#B44112] tabular-nums">
-                이자 +{formatKoreanUnits(result.compoundInterest)}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-3.5 pt-3 border-t border-[#D7E2F6] flex items-center justify-between text-sm">
-            <span className="text-slate-600 font-medium">복리 효과 차이</span>
-            <span className="font-bold text-[#B44112] text-[16px] tabular-nums">
-              +{formatKoreanUnits(result.compoundBonus)} 더 많음
-            </span>
-          </div>
-        </section>
-
-        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
-          <p>
-            단리는 원금({formatManEok(principal)})에만 이자가 붙지만, 복리는 불어난 이자에도 다시
-            이자가 붙어 시간이 길어질수록 눈덩이처럼 차이가 벌어집니다.
-          </p>
-          <p>
-            {years}년 뒤 복리 수령액은 단리보다{' '}
-            <strong className="font-bold text-[#B44112] tabular-nums">
-              {formatKoreanUnits(result.compoundBonus)}
-            </strong>{' '}
-            더 많습니다.
-          </p>
-          {annualRate > 0 && (
-            <p>
-              <strong>72의 법칙</strong>으로 계산하면 연 {annualRate.toFixed(1)}% 복리일 때 원금이
-              2배가 되는 데 약{' '}
-              <strong className="font-bold text-[#1D3B8B] tabular-nums">
-                {result.ruleOf72.toFixed(1)}년
-              </strong>
-              (72 ÷ {annualRate.toFixed(1)})이 걸립니다.
-            </p>
-          )}
-        </section>
-
-        <div className="hidden lg:block">
-          <CopyKakaoButton getCopyText={getCopyText} />
-        </div>
-      </div>
-
-      {/* Right Column: Controls + Growth Comparison */}
-      <div className="lg:col-span-7 space-y-4">
+      {/* 1. 조건 설정 (Mobile: 1st right under tab menu | Desktop: Right column top) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-1">
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-5">
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-[16px] font-bold text-slate-900">조건 설정</h2>
@@ -298,7 +230,78 @@ export function InterestCompareTab() {
             </div>
           </div>
         </section>
+      </div>
 
+      {/* 2. 결과 요약 + 설명 (+ Desktop Copy CTA) */}
+      <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-6 space-y-4">
+        <section className="rounded-2xl bg-[#EEF3FC] border border-[#DCE5F7] p-5">
+          <div className="text-[16px] sm:text-[17px] font-semibold text-slate-900 leading-snug">
+            <span className="text-[#1D3B8B] font-bold">{formatManEok(principal)}</span>을 연{' '}
+            <span className="text-[#1D3B8B] font-bold">{annualRate.toFixed(1)}%</span>로{' '}
+            <span className="text-[#1D3B8B] font-bold">{years}년</span> 굴리면
+          </div>
+
+          <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="rounded-xl bg-white/80 border border-[#DCE5F7] p-3.5">
+              <div className="text-xs font-medium text-slate-500">단리 최종 금액</div>
+              <div className="mt-1 text-[20px] sm:text-[22px] font-bold text-slate-700 tabular-nums leading-tight">
+                {formatKoreanUnits(result.simpleTotal)}
+              </div>
+              <div className="mt-1 text-xs text-slate-500 tabular-nums">
+                이자 +{formatKoreanUnits(result.simpleInterest)}
+              </div>
+            </div>
+
+            <div className="rounded-xl bg-white border border-[#B9CCEE] p-3.5">
+              <div className="text-xs font-semibold text-[#1D3B8B]">복리 최종 금액</div>
+              <div className="mt-1 text-[20px] sm:text-[22px] font-bold text-slate-950 tabular-nums leading-tight">
+                {formatKoreanUnits(result.compoundTotal)}
+              </div>
+              <div className="mt-1 text-xs font-semibold text-[#B44112] tabular-nums">
+                이자 +{formatKoreanUnits(result.compoundInterest)}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-3.5 pt-3 border-t border-[#D7E2F6] flex items-center justify-between text-sm">
+            <span className="text-slate-600 font-medium">복리 효과 차이</span>
+            <span className="font-bold text-[#B44112] text-[16px] tabular-nums">
+              +{formatKoreanUnits(result.compoundBonus)} 더 많음
+            </span>
+          </div>
+        </section>
+
+        <section className="rounded-2xl bg-[#FDF0E8] border border-[#F6DEC9] p-5 text-[14px] leading-[1.68] text-[#432312] space-y-2.5">
+          <p>
+            단리는 원금({formatManEok(principal)})에만 이자가 붙지만, 복리는 불어난 이자에도 다시
+            이자가 붙어 시간이 길어질수록 눈덩이처럼 차이가 벌어집니다.
+          </p>
+          <p>
+            {years}년 뒤 복리 수령액은 단리보다{' '}
+            <strong className="font-bold text-[#B44112] tabular-nums">
+              {formatKoreanUnits(result.compoundBonus)}
+            </strong>{' '}
+            더 많습니다.
+          </p>
+          {annualRate > 0 && (
+            <p>
+              <strong>72의 법칙</strong>으로 계산하면 연 {annualRate.toFixed(1)}% 복리일 때 원금이
+              2배가 되는 데 약{' '}
+              <strong className="font-bold text-[#1D3B8B] tabular-nums">
+                {result.ruleOf72.toFixed(1)}년
+              </strong>
+              (72 ÷ {annualRate.toFixed(1)})이 걸립니다.
+            </p>
+          )}
+        </section>
+
+        <div className="hidden lg:block">
+          <CopyKakaoButton getCopyText={getCopyText} />
+        </div>
+      </div>
+
+      {/* 3. 기간별 단리·복리 격차 (+ Mobile Copy CTA) */}
+      <div className="lg:col-span-7 lg:col-start-6 lg:row-start-2 space-y-4">
         {/* Growth Curve Bar Comparison */}
         <section className="rounded-2xl bg-white border border-[#E5E9F2] p-5 space-y-4">
           <div className="flex items-center justify-between gap-2">
