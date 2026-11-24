@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Plus Jakarta Sans', 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f5f7fb;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f5f7fb;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide scrollbars cleanly for horizontal tab strip on narrow screens */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom crisp range slider */
+input[type="range"].calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: #dfe5f0;
+  outline: none;
+}
+
+input[type="range"].calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1d3b8b;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(17, 24, 39, 0.22);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"].calc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
+}
+
+input[type="range"].calc-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1d3b8b;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(17, 24, 39, 0.22);
+  cursor: pointer;
+}
